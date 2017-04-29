@@ -59,6 +59,14 @@ function drawGraph(data){
 	g.append("g")
 		.attr("class","axis axis--y")
 		.call(d3.axisLeft(yScale))
+	//shows data on mousehover
+	let tooltip = d3.select("body")
+		.append("div")
+		.style("position","absolute")
+		.style("z-index","10")
+		.attr("class","tooltip")
+		.text("hello")
+		.style("visibility","hidden")
 
 	//draws bars on graph
 	g.selectAll(".bar")
@@ -68,7 +76,14 @@ function drawGraph(data){
 			.attr("width", xScale.bandwidth())
 			.attr("height",function(d){return innerHeight-yScale(d[1]);})
 			.attr("x",function(d,i){return xScale(d[0])})
-			.attr("y",function(d){return yScale(d[1]);});
+			.attr("y",function(d){return yScale(d[1]);})
+
+			.on("mouseover",function(d){
+				return tooltip.style("visibility","visible");})
+			.on("mousemove",function(){return tooltip.style("top",
+				(event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+			.on("mouseout",function(){
+				return tooltip.style("visibility","hidden");})
 }
 
 
