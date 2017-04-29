@@ -16,31 +16,62 @@ function getData(){
 }
 
 function drawGraph(data){
+	//variable holding svg attributes
+	const margin ={top:50,bottom:50,left:50,right:50}
+	const width = 950;
+	const height = 550;
+	const innerHeight = height - margin.top - margin.bottom;
+	const innerWidth = width - margin.left - margin.right;
+	///////////////////////////////////////////////////////////
+	//creates svg
+	let svg = d3.select("body")
+		.append("svg")
+		.attr("width",width)
+		.attr("height",height)
+		.attr("class","graph")
+	/////////////////////////////////////////////////////////////
+	//scales height and width of bars
 	let max = d3.max(data.data)[1];
 	let min = d3.min(data.data)[1];
-	//console.log(max,min,data.data.length)
+
 	let yScale = d3.scaleLinear()
 		.domain([0,max])
-		.range([0,450])
+		.rangeRound([innerHeight,0]);
+	let xScale = d3.scaleBand()
+		.rangeRound([0,innerWidth])
+		.domain(data.data.map(function(d) {return d[0];} ));
+	///////////////////////////////////////////////////////////////
+	let parseTime = d3.timeParse("%Y-%m-%d");
+	//console.log(parseTime(data.data[0][0]))
+	let parsed = data.data.map(function(d){return parseTime(d[0])})
+	let x = d3.scaleTime()
+		.range([0,innerWidth])
+		.domain(d3.extent(data.data,function(d){return parsed}));
+	//console.log(parsed);
+	////////////////////////////////////////////////////////////
+	let g = svg.append("g")
+		.attr("transform","translate("+margin.left +","+margin.top+")");
+	//x-axis
+	g.append("g")
+		.attr("class","axis axis--x")
+		.attr("transform","translate(0,"+innerHeight+")")
+		.call(d3.axisBottom(xScale)
+			);
 
-	let graph = d3.select("svg")
-		.selectAll("rect")
-		.data(data.data)//, function(d,i){/*console.log(d[1],i)*/;return d[1]})
-		.enter()
-		.append("rect")
-			.attr("width", 2.5)
-			.attr("height",function(d){return yScale(d[1]);})
-			.attr("x",function(d,i){return i*2.5+80;})
-			.attr("y",function(d){return 500 - yScale(d[1]);});
-			//console.log(d3.max(data.data),data.data)
-
-
-	let xScale = d3.scaleLinear()
-		.domain([0,100])
-		.range([0,800]);
-	let xAxis = d3.axisBottom(xScale);
-	graph.append("g")
-		.call(xAxis);
+	//y-axis
+	g.append("g")
+		.attr("class","axis axis--y")
+		.call(d3.axisLeft(yScale))
+	/////////////////////////////////////////////////////////////
+	//draws bars on graph
+	g.selectAll(".bar")
+		.data(data.data)
+		.enter().append("rect")
+			.attr("class","bar")
+			.attr("width", xScale.bandwidth())
+			.attr("height",function(d){return innerHeight-yScale(d[1]);})
+			.attr("x",function(d,i){return xScale(d[0])})
+			.attr("y",function(d){return yScale(d[1]);});
 }
 
 
