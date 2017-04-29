@@ -5,3 +5,6 @@ body{
 	border:1px solid black;
 	margin:1%;
 }
+.bar:hover{
+	fill:orange;
+}

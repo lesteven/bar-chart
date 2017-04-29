@@ -22,47 +22,44 @@ function drawGraph(data){
 	const height = 550;
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
-	///////////////////////////////////////////////////////////
+
 	//creates svg
 	let svg = d3.select("body")
 		.append("svg")
 		.attr("width",width)
 		.attr("height",height)
 		.attr("class","graph")
-	/////////////////////////////////////////////////////////////
+	
 	//scales height and width of bars
 	let max = d3.max(data.data)[1];
-	let min = d3.min(data.data)[1];
 
 	let yScale = d3.scaleLinear()
 		.domain([0,max])
-		.rangeRound([innerHeight,0]);
+		.range([innerHeight,0]);
 	let xScale = d3.scaleBand()
-		.rangeRound([0,innerWidth])
-		.domain(data.data.map(function(d) {return d[0];} ));
-	///////////////////////////////////////////////////////////////
-	let parseTime = d3.timeParse("%Y-%m-%d");
-	//console.log(parseTime(data.data[0][0]))
-	let parsed = data.data.map(function(d){return parseTime(d[0])})
-	let x = d3.scaleTime()
 		.range([0,innerWidth])
-		.domain(d3.extent(data.data,function(d){return parsed}));
-	//console.log(parsed);
-	////////////////////////////////////////////////////////////
+		.domain(data.data.map(function(d) {return d[0];} ));
+	
+	//parses date for x axis
+	let parseTime = d3.timeParse("%Y-%m-%d");
+	let xAxis = d3.scaleTime()
+		.range([0,innerWidth])
+		.domain(d3.extent(data.data.map(function(d){
+			return parseTime(d[0])})));
+	
 	let g = svg.append("g")
 		.attr("transform","translate("+margin.left +","+margin.top+")");
 	//x-axis
 	g.append("g")
 		.attr("class","axis axis--x")
 		.attr("transform","translate(0,"+innerHeight+")")
-		.call(d3.axisBottom(xScale)
+		.call(d3.axisBottom(xAxis)
 			);
-
 	//y-axis
 	g.append("g")
 		.attr("class","axis axis--y")
 		.call(d3.axisLeft(yScale))
-	/////////////////////////////////////////////////////////////
+
 	//draws bars on graph
 	g.selectAll(".bar")
 		.data(data.data)
