@@ -60,14 +60,12 @@ function drawGraph(data){
 		.attr("class","axis axis--y")
 		.call(d3.axisLeft(yScale))
 	//shows data on mousehover
-	let tooltip = d3.select("body")
-		.append("div")
-		.style("position","absolute")
-		.style("z-index","10")
+	let div = d3.select("body").append("div")
 		.attr("class","tooltip")
-		.text("hello")
-		.style("visibility","hidden")
+		.style("opacity",0);
+	//
 
+	let formatTime = d3.timeParse("%Y-%m-%d");
 	//draws bars on graph
 	g.selectAll(".bar")
 		.data(data.data)
@@ -77,13 +75,21 @@ function drawGraph(data){
 			.attr("height",function(d){return innerHeight-yScale(d[1]);})
 			.attr("x",function(d,i){return xScale(d[0])})
 			.attr("y",function(d){return yScale(d[1]);})
-
 			.on("mouseover",function(d){
-				return tooltip.style("visibility","visible");})
-			.on("mousemove",function(){return tooltip.style("top",
-				(event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-			.on("mouseout",function(){
-				return tooltip.style("visibility","hidden");})
+				div.transition()
+					.duration(200)
+					.style("opacity",.9)
+				div.html(d[1]+" Billion "+"<br/>"+ formatTime(d[0]))
+					.style("left",(d3.event.pageX)+"px")
+					.style("top",(d3.event.pageY-150)+"px")
+				
+			})
+			.on("mouseout",function(d){
+				div.transition()
+					.duration(500)
+					.style("opacity",0)
+			})
+			
 }
 
 
