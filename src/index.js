@@ -113,33 +113,8 @@ function getDescription(data,svg){
 		.attr("class","yAxis-des")
 		.attr("transform","translate(65,220) rotate(-90)")
 		.text(data.name.substr(0,22) + " USA")
-
-
 }
 
 
 getData();
 
-/*
-
-let data2 = [10, 15, 25, 120, 500, 980, 1200];
-
-let yScale = d3.scaleLinear()
-	.domain([10,1200])
-	.range([0,500]);
-      
-  d3.select("svg")
-    .selectAll("rect")
-    .data(data2)
-    .enter()
-    .append("rect")
-      .attr("width", 30)
-      .attr("height", function(d) { return yScale(d); })
-      .attr("x", function(d, i) { return i * 30; })
-      .attr("y", function(d) { return 550 - yScale(d);})
-      .style("fill", "blue")
-	  .style("stroke", "black")
-	  .style("stroke-width", "1px")
-	  .style("opacity", .25);
-	  */
-      
