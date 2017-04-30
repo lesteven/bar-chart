@@ -17,7 +17,7 @@ function getData(){
 
 function drawGraph(data){
 	//variable holding svg attributes
-	const margin ={top:50,bottom:50,left:50,right:50}
+	const margin ={top:50,bottom:75,left:50,right:50}
 	const width = 950;
 	const height = 550;
 	const innerHeight = height - margin.top - margin.bottom;
@@ -29,9 +29,11 @@ function drawGraph(data){
 		.attr("width",width)
 		.attr("height",height)
 		.attr("class","graph")
-	
+
+	getDescription(data,svg);
 	//scales height and width of bars
 	let max = d3.max(data.data)[1];
+	let min = d3.min(data.data)[1];
 
 	let yScale = d3.scaleLinear()
 		.domain([0,max])
@@ -64,8 +66,10 @@ function drawGraph(data){
 		.attr("class","tooltip")
 		.style("opacity",0);
 	//
-
-	let formatTime = d3.timeParse("%Y-%m-%d");
+	
+	const monthNames =["January","February","March","April","May",
+						"June","July","August","September","October",
+						"November","December"]
 	//draws bars on graph
 	g.selectAll(".bar")
 		.data(data.data)
@@ -79,9 +83,11 @@ function drawGraph(data){
 				div.transition()
 					.duration(200)
 					.style("opacity",.9)
-				div.html(d[1]+" Billion "+"<br/>"+ formatTime(d[0]))
+					let date = parseTime(d[0])
+				div.html(d[1]+" Billion "+"<br/>"+ monthNames[date.getMonth()]+
+					" "+date.getFullYear())
 					.style("left",(d3.event.pageX)+"px")
-					.style("top",(d3.event.pageY-150)+"px")
+					.style("top",(d3.event.pageY-70)+"px")
 				
 			})
 			.on("mouseout",function(d){
@@ -90,6 +96,25 @@ function drawGraph(data){
 					.style("opacity",0)
 			})
 			
+}
+
+function getDescription(data,svg){
+	svg.append("text")
+		.attr("class","title")
+		.attr("x","35%")
+		.attr("y","10%")
+		.text(data.name.substr(0,22))
+	svg.append("text")
+		.attr("class","description")
+		.attr("x","3%")
+		.attr("y","98%")
+		.text(data.description)
+	svg.append("text")
+		.attr("class","yAxis-des")
+		.attr("transform","translate(65,220) rotate(-90)")
+		.text(data.name.substr(0,22) + " USA")
+
+
 }
 
 

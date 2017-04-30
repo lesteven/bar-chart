@@ -2,7 +2,6 @@ body{
 	text-align:center;
 }
 .graph{
-	border:1px solid black;
 	margin:1%;
 }
 .bar:hover{
@@ -14,4 +13,19 @@ div{
 	padding:1%;
 	border-radius:5px;
 	position:absolute;
+}
+.title{
+	font-size:24px;
+	fill:teal;
+}
+.description{
+	font-size: 10px;
+	fill:teal;
+}
+.yAxis-des{
+	font-size:14px;
+}
+.bar{
+	fill:teal;
+	stroke:teal;
 }
