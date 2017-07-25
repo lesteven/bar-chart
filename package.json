@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack -p",
     "start": "webpack-dev-server"
   },
   "author": "",
@@ -13,6 +13,7 @@
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.4.0",
     "css-loader": "^0.28.0",
+    "html-webpack-plugin": "^2.29.0",
     "style-loader": "^0.16.1"
   }
 }

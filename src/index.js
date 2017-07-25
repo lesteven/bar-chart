@@ -3,19 +3,16 @@ require('./index.css');
 
 
 function getData(){
-	let data = undefined;
-	const dataLink =`https://raw.githubusercontent.com/
-	FreeCodeCamp/ProjectReferenceData/master/GDP-data.json`;
+	const dataLink =`https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json`;
 	fetch(dataLink)
 	.then(response=>response.json())
-	.then(json=>{
-		data = json;
-		//console.log(data.data);
+	.then(data=>{
 		drawGraph(data);
 	})
 }
 
 function drawGraph(data){
+	//console.log('data.data',data.data)
 	//variable holding svg attributes
 	const margin ={top:50,bottom:75,left:50,right:50}
 	const width = 950;
